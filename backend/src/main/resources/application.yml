@@ -1,5 +1,5 @@
 server:
-  port: ${PORT:8080}
+  port: ${PORT:10000}
   servlet:
     context-path: /
 
@@ -7,17 +7,23 @@ spring:
   application:
     name: unicore-erp-backend
 
+  # Disable Redis Auto-Repositories to prevent startup scanning delay
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
   datasource:
     url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:${MYSQL_URL:jdbc:h2:mem:university_erp;DB_CLOSE_DELAY=-1;MODE=MySQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE}}}
     username: ${DB_USER:${MYSQLUSER:sa}}
     password: ${DB_PASSWORD:${MYSQLPASSWORD:}}
     driver-class-name: ${DB_DRIVER:org.h2.Driver}
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-    database-platform: org.hibernate.dialect.H2Dialect
 
   flyway:
     enabled: false
@@ -45,7 +51,7 @@ logging:
     org.hibernate.SQL: WARN
 
 ---
-# MySQL Profile (Active when SPRING_PROFILES_ACTIVE=mysql or when connecting to MySQL)
+# MySQL Profile (Active when SPRING_PROFILES_ACTIVE=mysql)
 spring:
   config:
     activate:
@@ -65,7 +71,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    database-platform: org.hibernate.dialect.MySQLDialect
 
   flyway:
     enabled: true

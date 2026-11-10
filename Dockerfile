@@ -38,7 +38,7 @@ USER unicore:unicore
 # Copy executable JAR
 COPY --from=backend-build /app/backend/target/unicore-erp-backend-*.jar app.jar
 
-ENV PORT=8080
-EXPOSE 8080
+ENV PORT=10000
+EXPOSE 10000
 
 ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-XX:+UseG1GC", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
