@@ -1,0 +1,57 @@
+# Render Infrastructure Blueprint for UniCore ERP Enterprise
+services:
+  # Spring Boot Backend API Web Service
+  - type: web
+    name: unicore-erp-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    region: singapore
+    plan: starter
+    healthCheckPath: /v3/api-docs
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: unicore-mysql
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: unicore-mysql
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: unicore-mysql
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: unicore-mysql
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: unicore-mysql
+          property: password
+      - key: APP_JWT_SECRET
+        generateValue: true
+
+  # React + Vite Frontend Web Service
+  - type: web
+    name: unicore-erp-frontend
+    env: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    region: singapore
+    plan: starter
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: unicore-erp-backend
+          property: url
+
+databases:
+  # MySQL Database Instance
+  - name: unicore-mysql
+    databaseName: university_erp
+    user: unicore_admin
+    region: singapore
+    plan: starter

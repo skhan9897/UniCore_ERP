@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # MySQL Database Service
+  unicore-db:
+    image: mysql:8.0
+    container_name: unicore-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: university_erp
+      MYSQL_ROOT_PASSWORD: root_password_unicore
+      MYSQL_USER: unicore_user
+      MYSQL_PASSWORD: unicore_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache Service
+  unicore-redis:
+    image: redis:7-alpine
+    container_name: unicore-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot 3.x Backend Service
+  unicore-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: unicore-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: unicore-db
+      DB_PORT: 3306
+      DB_NAME: university_erp
+      DB_USER: unicore_user
+      DB_PASSWORD: unicore_password
+      SPRING_REDIS_HOST: unicore-redis
+      SPRING_REDIS_PORT: 6379
+      APP_JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    depends_on:
+      unicore-db:
+        condition: service_healthy
+      unicore-redis:
+        condition: service_healthy
+
+  # React + Vite + Nginx Frontend Service
+  unicore-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: unicore-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - unicore-backend
+
+volumes:
+  mysql_data:
+  redis_data:
