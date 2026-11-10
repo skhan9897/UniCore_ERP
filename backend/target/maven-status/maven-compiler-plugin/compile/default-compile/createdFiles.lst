@@ -10,6 +10,7 @@ com\university\erp\auth\dto\UserDto.class
 com\university\erp\university\repository\UniversityRepository.class
 com\university\erp\auth\dto\LoginRequest.class
 com\university\erp\university\entity\Campus.class
+com\university\erp\config\DataInitializer.class
 com\university\erp\auth\repository\RoleRepository.class
 com\university\erp\auth\entity\Permission$PermissionBuilder.class
 com\university\erp\config\WebMvcConfig.class
