@@ -10,6 +10,8 @@ services:
     plan: starter
     healthCheckPath: /v3/api-docs
     envVars:
+      - key: APP_JWT_SECRET
+        generateValue: true
       - key: DB_HOST
         fromDatabase:
           name: unicore-mysql
@@ -30,8 +32,6 @@ services:
         fromDatabase:
           name: unicore-mysql
           property: password
-      - key: APP_JWT_SECRET
-        generateValue: true
 
 databases:
   # MySQL Database Instance
