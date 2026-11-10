@@ -12,6 +12,7 @@ com\university\erp\auth\dto\LoginRequest.class
 com\university\erp\university\entity\Campus.class
 com\university\erp\auth\repository\RoleRepository.class
 com\university\erp\auth\entity\Permission$PermissionBuilder.class
+com\university\erp\config\WebMvcConfig.class
 com\university\erp\auth\entity\User$UserBuilder.class
 com\university\erp\auth\repository\UserRepository.class
 com\university\erp\university\entity\Tenant$TenantBuilder.class
@@ -35,6 +36,7 @@ com\university\erp\security\JwtAuthenticationFilter.class
 com\university\erp\tenant\TenantContextFilter.class
 com\university\erp\auth\dto\UserDto$UserDtoBuilder.class
 com\university\erp\auth\entity\User.class
+com\university\erp\config\WebMvcConfig$1.class
 com\university\erp\auth\dto\LoginResponse.class
 com\university\erp\university\entity\Tenant.class
 com\university\erp\security\CustomUserDetailsService.class
