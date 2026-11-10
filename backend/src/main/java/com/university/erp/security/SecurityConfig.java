@@ -47,7 +47,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs").permitAll()
+                        // Public Auth APIs, Swagger Docs, Error page
+                        .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs", "/error").permitAll()
+                        // Permit all Frontend SPA static assets and HTML routes (anything not starting with /api/v1/)
+                        .requestMatchers(request -> !request.getRequestURI().startsWith("/api/v1/")).permitAll()
+                        // Require JWT authentication for all protected business REST APIs under /api/v1/
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(tenantContextFilter, UsernamePasswordAuthenticationFilter.class)
