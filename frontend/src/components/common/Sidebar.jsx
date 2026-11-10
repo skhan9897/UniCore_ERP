@@ -32,22 +32,19 @@ const Sidebar = () => {
   ];
 
   const univAdminNav = [
-    { title: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { title: 'Admissions', path: '/admissions', icon: GraduationCap },
-    { title: 'Students', path: '/students', icon: Users },
+    { title: 'Dashboard Overview', path: '/dashboard', icon: LayoutDashboard },
+    { title: 'Students Directory', path: '/students', icon: GraduationCap },
     { title: 'Faculty & HR', path: '/faculty', icon: Users },
-    { title: 'Academics & Timetable', path: '/academics', icon: BookOpen },
-    { title: 'Attendance', path: '/attendance', icon: CheckSquare },
+    { title: 'Academics & Courses', path: '/courses', icon: BookOpen },
+    { title: 'Departments', path: '/departments', icon: Building2 },
+    { title: 'Attendance Monitor', path: '/attendance', icon: CheckSquare },
     { title: 'Examinations', path: '/examinations', icon: Calendar },
     { title: 'Fees & Finance', path: '/finance', icon: CreditCard },
-    { title: 'Library', path: '/library', icon: BookMarked },
-    { title: 'Hostels', path: '/hostels', icon: Home },
-    { title: 'Transport', path: '/transport', icon: Bus },
+    { title: 'Hostels & Beds', path: '/hostels', icon: Home },
     { title: 'Placements', path: '/placements', icon: Briefcase },
-    { title: 'Reports & Audit', path: '/reports', icon: FileText },
   ];
 
-  const navItems = hasRole('ROLE_SUPER_ADMIN') ? superAdminNav : univAdminNav;
+  const isSuperAdmin = hasRole('ROLE_SUPER_ADMIN');
 
   return (
     <aside className="w-64 bg-navy-900 text-gray-200 flex flex-col min-h-screen shadow-xl">
@@ -64,32 +61,58 @@ const Sidebar = () => {
       </div>
 
       <div className="px-4 py-3 border-b border-navy-800 bg-navy-800/40">
-        <p className="text-xs text-gray-400 uppercase font-semibold">Active Portal</p>
+        <p className="text-xs text-gray-400 uppercase font-semibold">Active Navigation</p>
         <p className="text-sm font-medium text-white truncate mt-0.5">
-          {hasRole('ROLE_SUPER_ADMIN') ? 'Super Admin Portal' : 'University Management'}
+          {isSuperAdmin ? 'Super Admin Workspace' : 'University Management'}
         </p>
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {navItems.map((item) => {
+        <p className="px-3 text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-2">Core Modules</p>
+        {univAdminNav.map((item) => {
           const Icon = item.icon;
           return (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition-all ${
                   isActive
-                    ? 'bg-blue-600 text-white shadow-md font-semibold'
+                    ? 'bg-blue-600 text-white shadow-md font-bold'
                     : 'text-gray-300 hover:bg-navy-800 hover:text-white'
                 }`
               }
             >
-              <Icon className="w-5 h-5 flex-shrink-0" />
+              <Icon className="w-4 h-4 flex-shrink-0" />
               <span>{item.title}</span>
             </NavLink>
           );
         })}
+
+        {isSuperAdmin && (
+          <>
+            <p className="px-3 text-[10px] uppercase font-bold text-purple-400 tracking-wider mt-5 mb-2">Super Admin Control</p>
+            {superAdminNav.map((item) => {
+              const Icon = item.icon;
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition-all ${
+                      isActive
+                        ? 'bg-purple-600 text-white shadow-md font-bold'
+                        : 'text-gray-300 hover:bg-navy-800 hover:text-white'
+                    }`
+                  }
+                >
+                  <Icon className="w-4 h-4 flex-shrink-0 text-purple-400" />
+                  <span>{item.title}</span>
+                </NavLink>
+              );
+            })}
+          </>
+        )}
       </nav>
 
       <div className="p-4 border-t border-navy-800 bg-navy-950/60">
